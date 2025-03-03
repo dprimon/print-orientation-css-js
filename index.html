@@ -1,0 +1,39 @@
+<head>
+  <style>
+#subject {
+  width: 30cm;
+  height: 8cm;
+  background-color: azure;
+  border: 1px dashed black;
+
+  text-align: center;
+  vertical-align: middle;
+}
+  </style>
+</head>
+<body>
+<div id="subject">Testo</div>
+</body>
+<script>
+  window.addEventListener("beforeprint", (event) => {
+  console.log("Before print");
+});
+  const style = document.createElement('style');
+  const subject = document.getElementById('subject');
+  const subjectWidthInCm = CSS.px(parseFloat(window.getComputedStyle(subject).width))
+                              .to('cm')
+                              .value;
+  const widthThresholdCm = 20;
+
+  console.log(`subject witdth ${subjectWidthInCm}cm: `);
+  const sizeValue = subjectWidthInCm < widthThresholdCm ? 'portrait' : 'landscape';
+  style.innerHTML = `
+      @media print {
+        @page {
+           size: ${sizeValue};
+        }
+      }
+    `;
+  }
+  document.head.appendChild(style);
+</script>
